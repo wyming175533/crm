@@ -1,0 +1,13 @@
+记录：从第二次提交开始
+
+第二次提交：
+对于市场活动中创建的项目，在页面加载时，点击保存时，以及查询时会对展示列表进行局部刷新。
+刷新采用按照创建时间排序的放法，在无其它查询条件的时候默认第一行显示最新创建的数据
+刷新分页在该版本中是每页显示两行，已写死，下个版本中更改
+
+在本次过程中修复了三处bug
+1对于返回给前端的vo对象中，属性分别为Integer和List<Activity>类型
+在ActivityDao.xml，getTotalByendition中写成了返回值类型应该用integer，写成了Activity
+2在getActivityListByCondition中，order by a.createTime写错
+前两者导致了反射中动态代理部分的异常，错误不在java代码，很难调试
+3在返回给前端的数据data中，vo中属性名datalist，写成了dataList，导致前端无法获取到所需数据
