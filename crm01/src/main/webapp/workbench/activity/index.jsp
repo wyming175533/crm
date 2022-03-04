@@ -88,7 +88,11 @@
 
 			//点击查询操作，通过ajax请求局部刷新页面
 			$("#search").click(function (){
-
+                              //将查询条件保存到隐藏区域
+				$("#hidden-name").val($.trim($("#search-name").val()));
+				$("#hidden-owner").val($.trim($("#search-owner").val()));
+				$("#hidden-startDate").val($.trim($("#search-startDate").val()));
+				$("#hidden-endDate").val($.trim($("#search-endDate").val()));
 					pagelist(1,2);
 										 })
 
@@ -103,14 +107,18 @@
 
 			function pagelist(pageNo,pageSize){
 				//pageNo每页页码，pageSize每页数量
-
+				//取出隐藏域的值
+				$("#search-name").val($.trim($("#hidden-name").val()));
+				$("#search-owner").val($.trim($("#hidden-owner").val()));
+				$("#search-startDate").val($.trim($("#hidden-startDate").val()));
+				$("#search-endDate").val($.trim($("#hidden-endDate").val()));
 				$.ajax({
 					url: "workbench/activity/pageList.do",
 					dataType: "json",
 					data:{
 						"pageNo":pageNo,
 						"pageSize":pageSize,
-						"name":$.trim($("#search-id").val()),
+						"name":$.trim($("#search-name").val()),
 						"owner":$.trim($("#search-owner").val()),
 						"startDate":$.trim($("#search-startDate").val()),
 						"endDate":$.trim($("#search-endDate").val())
@@ -168,6 +176,11 @@
 </script>
 </head>
 <body>
+//创建隐藏区域保存值
+<input type="hidden" id="hidden-name"/>
+<input type="hidden" id="hidden-owner"/>
+<input type="hidden" id="hidden-startDate"/>
+<input type="hidden" id="hidden-endDate"/>
 
 	<!-- 创建市场活动的模态窗口 -->
 	<div class="modal fade" id="createActivityModal" role="dialog">
@@ -315,7 +328,7 @@
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
-				      <input class="form-control" type="text" id="search-id">
+				      <input class="form-control" type="text" id="search-name">
 				    </div>
 				  </div>
 				  
