@@ -32,7 +32,7 @@
 				})
 				});
 
-			//pagelist(1,2);
+			pagelist(1,2);
 
 			//加载创建时候的所有者信息，并在加载完毕后打开模态窗口
 			$.ajax({
@@ -71,7 +71,7 @@
 						if(data.success){
 							$("#activityAddForm")[0].reset();
 							$("#createActivityModal").modal("hide");
-							//pagelist(1,2);
+							pagelist(1,2);
 						}else{
 							alert("添加失败");
 						}
@@ -81,10 +81,11 @@
 				})
 
 			});
+
 			//点击查询操作，通过ajax请求局部刷新页面
 			$("#search").click(function (){
 
-				//	pagelist(1,2);
+					pagelist(1,2);
 										 })
 
 
@@ -96,44 +97,44 @@
 			点击分页操作时
 			 */
 
-			// function pagelist(pageNo,pageSize){
-			// 	//pageNo每页页码，pageSize每页数量
-			// 	alert("分页操作")
-			//
-			// 	$.ajax({
-			// 		url: "workbench/activity/pageList.do",
-			// 		dataType: "json",
-			//
-			// 		data:{
-			// 			"pageNo":pageNo,
-			// 			"pageSize":pageSize,
-			// 			"name":$.trim($("#search-id")).val(),
-			// 			"owner":$.trim($("#search-owner")).val(),
-			// 			"startDate":$.trim($("#search-startDate")).val(),
-			// 			"endDate":$.trim($("#search-endDate")).val()
-			// 		},
-			// 		type: "get",
-			// 		success: function (data) {
-			// 			/*
-            //                         date 返回的数据应该包含总记录数，和市场活动信息
-            //                           {"total":100},"dataList":[{市场活动1},{市场活动2}]]
-            //              */
-			// 		var html="";
-			// 		$.each(data.dataList,function (i,e){
-			// 				html+='<tr class="active">'
-			// 				html+='<td><input type="checkbox" value="'+e.id+'"/></td>'
-			// 				html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+e.name+'</a></td>'
-			// 				html+='<td>'+e.owner+'</td>'
-			// 				html+='<td>'+e.startDate+'</td>'
-			// 				html+='<td>'+e.endDate+'</td>'
-			// 				html+='</tr>'
-			//
-			// 		})
-			// 			$("#activityBody").html(html);
-			//
-			// 		}
-			// 	})
-			// }
+			function pagelist(pageNo,pageSize){
+				//pageNo每页页码，pageSize每页数量
+
+				$.ajax({
+					url: "workbench/activity/pageList.do",
+					dataType: "json",
+					data:{
+						"pageNo":pageNo,
+						"pageSize":pageSize,
+						"name":$.trim($("#search-id").val()),
+						"owner":$.trim($("#search-owner").val()),
+						"startDate":$.trim($("#search-startDate").val()),
+						"endDate":$.trim($("#search-endDate").val())
+					},
+					type: "get",
+					success: function (data) {
+
+						/*
+                                    date 返回的数据应该包含总记录数，和市场活动信息
+                                      {"total":100},"dataList":[{市场活动1},{市场活动2}]]
+                         */
+					var html="";
+					$.each(data.datalist,function (i,e){
+							html+='<tr class="active">';
+							html+='<td><input type="checkbox" value="'+e.id+'"/></td>';
+							html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+e.name+'</a></td>';
+							html+='<td>'+e.owner+'</td>';
+							html+='<td >'+e.startDate+'</td>';
+							html+='<td >'+e.endDate+'</td>';
+							html+='</tr>';
+
+					})
+						$("#activityBody").html(html);
+
+					}
+				})
+
+			}
 
 
 		});
@@ -173,11 +174,11 @@
 						<div class="form-group" id="addBtn">
 							<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="create-startDate">
+								<input type="text" class="form-control time" readonly="readonly" id="create-startDate">
 							</div>
 							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="create-endDate">
+								<input type="text" class="form-control time" readonly="readonly" id="create-endDate">
 							</div>
 						</div>
                         <div class="form-group">
@@ -304,13 +305,13 @@
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon" id="search-startDate">开始日期</div>
-					  <input class="form-control" type="text" id="startTime" />
+					  <input class="form-control time" readonly="readonly" type="text" id="startTime" />
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon" id="search-endDate">结束日期</div>
-					  <input class="form-control" type="text" id="endTime">
+					  <input class="form-control time" readonly="readonly" type="text" id="endTime">
 				    </div>
 				  </div>
 				  
@@ -333,8 +334,8 @@
 							<td><input type="checkbox" /></td>
 							<td>名称</td>
                             <td>所有者</td>
-							<td>开始日期</td>
-							<td>结束日期</td>
+							<td >开始日期</td>
+							<td >结束日期</td>
 						</tr>
 					</thead>
 					<tbody id="activityBody">

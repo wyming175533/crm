@@ -6,19 +6,20 @@
 <mapper namespace="com.bjpowernode.crm.settings.dao.ActivityDao">
     <select id="getActivityListByCondition" resultType="Activity">
         select
-        u.name as a.id
+        a.id,
+        u.name as owner,
         a.name,
         a.startDate,
         a.endDate
-        from tbl_user u
-        join  tbl_activity a
-        on u.id=a.owner
+        from tbl_activity a
+        join  tbl_user u
+        on a.owner=u.id
         <where>
             <if test="name!=null and name!='' ">
                 a.name like '%' #{name} '%'
             </if>
             <if test="owner != null and owner != ''">
-                and u.name like '%' #{u.name} '%'
+                and u.name like '%' #{owner} '%'
             </if>
 
             <if test="startDate != null and startDate != ''">
@@ -28,23 +29,23 @@
                 and a.endDate &lt; #{endDate}
             </if>
         </where>
-        order by createTime desc
+        order by a.createTime desc
         limit #{skipCount},#{pageSize}
     </select>
 
 
 
-    <select id="getTotalByendition" resultType="Activity">
+    <select id="getTotalByendition" resultType="integer" >
         select count(*)
-        from tbl_user u
-        join  tbl_activity a
-        on a.owner=u.id
+        from tbl_activity a
+        join  tbl_user u
+        on u.id=a.owner
         <where>
             <if test="name!=null and name!='' ">
                 a.name like '%' #{name} '%'
             </if>
             <if test="owner != null and owner != ''">
-                and u.name like '%' #{u.name} '%'
+                and u.name like '%' #{owner} '%'
             </if>
 
             <if test="startDate != null and startDate != ''">

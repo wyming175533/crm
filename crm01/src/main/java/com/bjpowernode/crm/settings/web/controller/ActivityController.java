@@ -11,6 +11,7 @@ import com.bjpowernode.crm.utils.PrintJson;
 import com.bjpowernode.crm.utils.ServiceFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.vo.pagInActionVo;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.ServletException;
@@ -26,21 +27,20 @@ import java.util.Map;
 public class ActivityController extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path=request.getServletPath();
-        System.out.println("????????????????????");
-        if("/workbench/activity/getUserList.do".equals(path)){
+
+        if("/workbench/activity/getUserList.do".equals(path)){//获取所有者清单
             getUserList(request,response);
         }
-         else if ("/workbench/activity/save.do".equals(path)){
+         else if ("/workbench/activity/save.do".equals(path)){//保存活动创建
              save(request,response);
-        }else if("/workbench/activity/pageList.do".equals(path)){
-            System.out.println("查询市场活动");
+        }else if("/workbench/activity/pageList.do".equals(path)){//查询局部刷新
              pageList(request,response);
 
         }
     }
 
     private void pageList(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("查询市场活动");
+        //System.out.println("进入查询市场活动");
 
         String name=request.getParameter("name");
         String owner=request.getParameter("owner");
@@ -49,11 +49,14 @@ public class ActivityController extends HttpServlet {
         String startDate=request.getParameter("startDate");
         String endDate=request.getParameter("endDate");
 
-        Integer pageSize=Integer.parseInt(pageSizestr);
-        Integer pageNo=Integer.parseInt(pageNostr);
-        int skipCount=(pageNo-1)*pageSize;
+        Integer pageSize=Integer.valueOf(pageSizestr);
+        Integer pageNo=Integer.valueOf(pageNostr);
+        System.out.println(pageSize);
+        System.out.println(pageNo+"====================================================---------------------------");
+        Integer skipCount=(pageNo-1)*pageSize;
 
         Map<String,Object> map=new HashMap<>();
+
         map.put("name",name);
         map.put("owner",owner);
         map.put("startDate",startDate);
@@ -64,13 +67,17 @@ public class ActivityController extends HttpServlet {
         //封装到map中向提交到servie进行处理
 
         ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        System.out.println(map);
+        //通过自定义vo类获取返回json
         pagInActionVo<Activity> vo=as.pageList(map);
+
         PrintJson.printJsonObj(response,vo);
 
 
     }
 
-
+    //市场活动后创建活动保存
     private void save(HttpServletRequest request, HttpServletResponse response) {
 
         Boolean flag=false;

@@ -15,7 +15,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Boolean save(Activity activity) {
         Boolean flag=false;
-        int num=activityDao.save(activity);
+        Integer num=activityDao.save(activity);
         if(num!=-1){flag=true;}
         return flag;
 
@@ -23,8 +23,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public pagInActionVo<Activity> pageList(Map<String, Object> map) {
-        int total=activityDao.getTotalByendition(map);
-        List<Activity> activities=activityDao.getActivityListByCondition(map);
+        int total=activityDao.getTotalByendition(map);//获取total总条数
+        List<Activity> activities=activityDao.getActivityListByCondition(map);//获取活动详情信息
         pagInActionVo<Activity> vo=new pagInActionVo<>();
         vo.setTotal(total);
         vo.setDatalist(activities);

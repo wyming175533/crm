@@ -10,5 +10,5 @@ public interface ActivityDao {
 
     List<Activity> getActivityListByCondition(Map<String, Object> map);
 
-    int getTotalByendition(Map<String, Object> map);
+    Integer getTotalByendition(Map<String, Object> map);
 }
