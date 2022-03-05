@@ -94,7 +94,54 @@
 				$("#hidden-startDate").val($.trim($("#search-startDate").val()));
 				$("#hidden-endDate").val($.trim($("#search-endDate").val()));
 					pagelist(1,2);
-										 })
+		 								 })
+
+
+			$("#qx").click(function (){//全选
+				$("input[name=xz]").prop("checked",this.checked);
+			})
+		//动态生成的元素，要以on方法形式触发
+		//	语法$(需要绑定的有效的外层方法).on("绑定事件的方式"，需要绑定的元素的juery对象，回调函数)
+			$("#activityBody").on("click",$("input[name=xz]"),function (){
+				if($("input[name=xz]").length==$("input[name=xz]:checked").length){
+					$("#qx").prop("checked",true);
+				}
+				else{
+					$("#qx").prop("checked",false);
+				}
+			})
+
+			$("#delete-btn").click(function (){
+				var $xz=$("input[name=xz]:checked");
+				var param="";
+				if($xz.length==0){
+					alert("请选择要删除的项");
+				}
+				else {
+
+					for(var i=0;i<$xz.length;i++){
+						param+="id="+$($xz[i]).val();
+						if(i<$xz.length-1){
+							param+="&";
+						}
+					}
+				}
+				$.ajax({
+					url: "workbench/activity/delete.do",
+					dataType: "json",
+					type: "get",
+					data:param,
+					success: function (data) {
+						if(data.success){
+
+						}
+						else {
+							alert("删除失败！")
+						}
+					}
+				})
+
+			})
 
 
 			/*
@@ -106,6 +153,7 @@
 			 */
 
 			function pagelist(pageNo,pageSize){
+				$("#qx").prop("checked",false);
 				//pageNo每页页码，pageSize每页数量
 				//取出隐藏域的值
 				$("#search-name").val($.trim($("#hidden-name").val()));
@@ -133,7 +181,7 @@
 					var html="";
 					$.each(data.datalist,function (i,e){
 							html+='<tr class="active">';
-							html+='<td><input type="checkbox" value="'+e.id+'"/></td>';
+							html+='<td><input type="checkbox" name="xz" value="'+e.id+'"/></td>';
 							html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+e.name+'</a></td>';
 							html+='<td>'+e.owner+'</td>';
 							html+='<td >'+e.startDate+'</td>';
@@ -361,7 +409,7 @@
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal"><span class="glyphicon glyphicon-plus" ></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="delete-btn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 			</div>
@@ -369,7 +417,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input type="checkbox" id="qx"/></td>
 							<td>名称</td>
                             <td>所有者</td>
 							<td >开始日期</td>

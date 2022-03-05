@@ -11,4 +11,8 @@ public interface ActivityDao {
     List<Activity> getActivityListByCondition(Map<String, Object> map);
 
     Integer getTotalByendition(Map<String, Object> map);
+
+    int getDeleteActivityCount(String[] ids);
+
+    int DeleteActivityCount(String[] ids);
 }
