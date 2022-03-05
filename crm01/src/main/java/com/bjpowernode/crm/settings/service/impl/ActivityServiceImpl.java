@@ -3,8 +3,10 @@ package com.bjpowernode.crm.settings.service.impl;
 import com.bjpowernode.crm.settings.dao.ActivityDao;
 import com.bjpowernode.crm.settings.dao.ActivityRemarkDao;
 import com.bjpowernode.crm.settings.domain.Activity;
+import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.ActivityService;
 import com.bjpowernode.crm.utils.SqlSessionUtil;
+import com.bjpowernode.crm.vo.lodInActionVo;
 import com.bjpowernode.crm.vo.pagInActionVo;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.ibatis.session.SqlSession;
@@ -53,4 +55,19 @@ public class ActivityServiceImpl implements ActivityService {
 
         return flag;
     }
+
+    @Override
+    public Activity getActivity(String id) {
+        Activity activity=activityDao.getActivity(id);
+        return activity;
+    }
+
+    @Override
+    public Boolean update(Activity activity) {
+        Boolean flag=true;
+        flag=activityDao.update(activity);
+        return flag;
+    }
+
+
 }

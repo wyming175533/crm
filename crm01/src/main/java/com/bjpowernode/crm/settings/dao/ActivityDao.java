@@ -1,6 +1,7 @@
 package com.bjpowernode.crm.settings.dao;
 
 import com.bjpowernode.crm.settings.domain.Activity;
+import com.bjpowernode.crm.vo.lodInActionVo;
 
 import java.util.List;
 import java.util.Map;
@@ -15,4 +16,9 @@ public interface ActivityDao {
     int getDeleteActivityCount(String[] ids);
 
     int DeleteActivityCount(String[] ids);
+
+
+    Activity getActivity(String id);
+
+    Boolean update(Activity activity);
 }

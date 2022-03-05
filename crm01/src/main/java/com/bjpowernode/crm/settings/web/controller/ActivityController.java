@@ -10,6 +10,7 @@ import com.bjpowernode.crm.utils.DateTimeUtil;
 import com.bjpowernode.crm.utils.PrintJson;
 import com.bjpowernode.crm.utils.ServiceFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
+import com.bjpowernode.crm.vo.lodInActionVo;
 import com.bjpowernode.crm.vo.pagInActionVo;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -38,7 +39,57 @@ public class ActivityController extends HttpServlet {
 
         }else if("/workbench/activity/delete.do".equals(path)){//删除市场活动项
              delete(request,response);
+        }else if("/workbench/activity/getUserListAndActivity.do".equals(path)){//获取用户列表和活动信息
+             getUserListAndActivity(request,response);
+        }else if("/workbench/activity/update.do".equals(path)){
+             update(request,response);
         }
+    }
+
+    private void update(HttpServletRequest request, HttpServletResponse response) {
+        String uname=request.getParameter("username");
+        String id=request.getParameter("id");
+        String owner=request.getParameter("owner");
+        String name=request.getParameter("name");
+        String startDate=request.getParameter("startDate");
+        String endDate=request.getParameter("endDate");
+        String cost=request.getParameter("cost");
+        String description=request.getParameter("description");
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Activity activity=new Activity();
+
+        activity.setCost(cost);
+        activity.setDescription(description);
+        activity.setEditBy(uname);
+        activity.setEditTime(DateTimeUtil.getSysTime());
+        activity.setId(id);
+        activity.setEndDate(endDate);
+        activity.setStartDate(startDate);
+        activity.setName(name);
+        activity.setOwner(owner);
+
+        Boolean flag=as.update(activity);
+        PrintJson.printJsonFlag(response,flag);
+
+
+    }
+
+    private void getUserListAndActivity(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("获取用户信息列表和市场活动信息中....");
+
+        String id=request.getParameter("id");
+
+        List<User> users=new ArrayList<>();
+        UserService userService= (UserService) ServiceFactory.getService(new UserServiceImpl());
+        users=userService.getUsers();
+
+        lodInActionVo<User> vo=new lodInActionVo();
+        vo.setUserList(users);
+
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Activity activity=as.getActivity(id);
+        vo.setActivity(activity);
+        PrintJson.printJsonObj(response,vo);
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) {
