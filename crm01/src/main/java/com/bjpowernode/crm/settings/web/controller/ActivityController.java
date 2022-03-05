@@ -96,7 +96,6 @@ public class ActivityController extends HttpServlet {
         System.out.println("删除中，，，，，，，，，，");
         Boolean flag=false;
         String[] ids=request.getParameterValues("id");
-        System.out.println(ids);
         ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
         flag=as.delete(ids);
         PrintJson.printJsonFlag(response,flag);

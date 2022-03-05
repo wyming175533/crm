@@ -127,24 +127,25 @@
 							param+="&";
 						}
 					}
-				}
-				if(confirm("确定删除所选中的项吗？")){
-					$.ajax({
-						url: "workbench/activity/delete.do",
-						dataType: "json",
-						type: "get",
-						data:param,
-						success: function (data) {
-							if(data.success){
-								//删除操作完成后进行页面的局部刷新
-								pagelist(1,2);
+					if(confirm("确定删除所选中的项吗？")){
+						$.ajax({
+							url: "workbench/activity/delete.do",
+							dataType: "json",
+							type: "get",
+							data:param,
+							success: function (data) {
+								if(data.success){
+									//删除操作完成后进行页面的局部刷新
+									pagelist(1,2);
+								}
+								else {
+									alert("删除失败！")
+								}
 							}
-							else {
-								alert("删除失败！")
-							}
-						}
-					})
+						})
+					}
 				}
+
 
 			})//点击删除按钮的一系列操作
 
