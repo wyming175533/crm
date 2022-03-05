@@ -58,7 +58,19 @@
     </select>
 
 
+<select id="getDeleteActivityCount" resultType="int">
+    select count(*) from tbl_activity where id in 
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+</select>
 
+    <delete id="DeleteActivityCount" >
+        delete from tbl_activity where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 
 
 
