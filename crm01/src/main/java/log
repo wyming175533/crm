@@ -39,3 +39,7 @@ tbl_activity_remark中的内容，再删除tbl_activity中的内容
 
 第六次提交：增加了备注相关系列，在市场活动点击活动名称进入详情页，详情页通过传统请求进入detail详情页将返回的信息展现，
 同时在该页面进行ajax局部信息刷新备注页
+完成了备注方面增删改的操作。同时注意，如果bug中出现和classnotfound，notclass...,mapper-config not found
+可能是由于资源文件没有设置为rootresources导致的
+
+如果是和动态代理，过滤器相关，又有menth相关信息，可能是dao.xml文件和dao文件的方法名，id不一致导致的。
