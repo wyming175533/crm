@@ -49,6 +49,49 @@ public class ActivityController extends HttpServlet {
         }else if ("/workbench/activity/getRemarkListById.do".equals(path)){
             getRemarkListById(request,response);
         }
+         else if("/workbench/activity/deleteRemark.do".equals(path)){
+             deleteRemark(request,response);
+        }else if("/workbench/activity/saveRemark.do".equals(path)){
+            System.out.println("save------------------------=============");
+            saveRemark(request,response);
+        }
+    }
+
+    private void saveRemark(HttpServletRequest request, HttpServletResponse response) {
+        String activityId=request.getParameter("id");
+        String noteContent=request.getParameter("noteContent");
+        User user= (User) request.getSession().getAttribute("user");
+        String createBy=user.getName();
+        String createTime=DateTimeUtil.getSysTime();
+        String editFlag ="0";
+        String id=UUIDUtil.getUUID();
+
+        ActivityRemark activityRemark=new ActivityRemark();
+        activityRemark.setActivityId(activityId);
+        activityRemark.setCreateBy(createBy);
+        activityRemark.setCreateTime(createTime);
+        activityRemark.setId(id);
+        activityRemark.setEditFlag(editFlag);
+        activityRemark.setNoteContent(noteContent);
+
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Boolean flag=as.saveRemark(activityRemark);
+        Map<String,Object> map=new HashMap<>();
+
+        map.put("success",flag);
+        map.put("ar",activityRemark);
+
+        PrintJson.printJsonObj(response,map);
+
+    }
+
+    private void deleteRemark(HttpServletRequest request, HttpServletResponse response) {
+        String id=request.getParameter("id");
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Boolean flag=as.deleteRemark(id);
+        PrintJson.printJsonFlag(response,flag);
+
+
     }
 
     private void getRemarkListById(HttpServletRequest request, HttpServletResponse response) {

@@ -50,7 +50,53 @@
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
+		//动态加载添加删除键
+		$("#remarkBody").on("mouseover",".remarkDiv",function(){
+			$(this).children("div").children("div").show();
+		})
+		$("#remarkBody").on("mouseout",".remarkDiv",function(){
+			$(this).children("div").children("div").hide();
+		})
+
 		RemarkList();
+		$("#saveRemark").click(function (){
+
+			$.ajax({
+				url: "workbench/activity/saveRemark.do",
+				dataType: "json",
+				data:{
+					"id":"${a.id}",
+					"noteContent":$.trim($("#remark").val())
+				},
+				type: "post",
+				success: function (data) {
+					/**
+					 * data{"success":true.{ar}}
+					 */
+					if(data.success){
+						var html="";
+						html+='<div id="'+data.ar.id+'" class="remarkDiv" style="height: 60px;">';
+						html+='<img title="" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+						html+='<div style="position: relative; top: -40px; left: 40px;" >';
+						html+='<h5>'+data.ar.noteContent+'</h5>';
+						html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+data.ar.createTime+'由'+data.ar.createBy+'</small>';
+						html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+						html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+						html+='&nbsp;&nbsp;&nbsp;&nbsp;';//											动态拼接的参数需要用引号引起来，\',\用来转义		\'  '+e.id+'\'
+						html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" onclick="deleteRemark(\''+data.ar.id+'\')" style="font-size: 20px; color: #FF0000;"></span></a>';
+						html+='</div>';
+						html+='</div>';
+						html+='</div>';
+						$("#append").append(html);
+						$("#remark").val("");
+					}
+					else{
+						alert("添加失败");
+					}
+				}
+
+			})
+		})
 
 	});
 
@@ -64,20 +110,18 @@
 			type: "get",
 			success: function (data) {
 				//[{备注1},{备注2},{3}]
-
 				var html="";
+
 				$.each(data,function (i,e){
-					alert(e.noteContent);
-					html+='<div class="remarkDiv" style="height: 60px;">';
+					html+='<div id="'+e.id+'" class="remarkDiv" style="height: 60px;">';
 					html+='<img title="" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					html+='<div style="position: relative; top: -40px; left: 40px;" >';
 					html+='<h5>'+e.noteContent+'</h5>';
 					html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+(e.editFlag==0?e.createTime:e.editTime)+'由'+(e.editFlag==0?e.createBy:e.editBy)+'</small>';
-					//html+='<font color="gray">市场活动-'+e.noteContent+'</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;">'+e.editFlag==0?e.createTime:e.editTime+' 由'+e.editFlag==0?e.createBy:e.editBy+'</small>';
 					html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
-					html+='&nbsp;&nbsp;&nbsp;&nbsp;';
-					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+					html+='&nbsp;&nbsp;&nbsp;&nbsp;';//											动态拼接的参数需要用引号引起来，\',\用来转义		\'  '+e.id+'\'
+					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" onclick="deleteRemark(\''+e.id+'\')" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html+='</div>';
 					html+='</div>';
 					html+='</div>';
@@ -88,7 +132,30 @@
 		})
 
 	}
-	
+	function  deleteRemark(id){
+		$.ajax({
+			url: "workbench/activity/deleteRemark.do",
+			dataType: "json",
+			data:{
+				"id":id
+			},
+			type: "get",
+			success: function (data) {
+				if(data.success){
+					//RemarkList();//删除成功刷新备注列表
+					$("#"+id).remove();
+
+				}
+				else{
+					alert("删除失败");
+				}
+
+			}
+
+		})
+	}
+
+
 </script>
 
 </head>
@@ -188,12 +255,14 @@
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 30px; left: 40px;">
+	<div style="position: relative; top: 30px; left: 40px;" id="remarkBody">
 		<div class="page-header">
 			<h4>备注</h4>
 		</div>
 		<!-- 备注1 -->
+		<div id="append">
 
+		</div>
 		
 
 		
@@ -202,7 +271,7 @@
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button type="button" class="btn btn-primary" id="saveRemark">保存</button>
 				</p>
 			</form>
 		</div>

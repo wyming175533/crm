@@ -22,7 +22,7 @@ public class ActivityServiceImpl implements ActivityService {
     public Boolean save(Activity activity) {
         Boolean flag=false;
         Integer num=activityDao.save(activity);
-        if(num!=-1){flag=true;}
+        if(num>0){flag=true;}
         return flag;
 
     }
@@ -80,6 +80,26 @@ public class ActivityServiceImpl implements ActivityService {
     public List<ActivityRemark> getRemarkListById(String id) {
         List<ActivityRemark>  a=activityRemarkDao.getRemarkListById(id);
         return a;
+    }
+
+    @Override
+    public Boolean deleteRemark(String id) {
+        Boolean flag=false;
+        int fl=activityRemarkDao.deleteRemarkById(id);
+        if(fl>0)
+            flag=true;
+        return flag;
+    }
+
+    @Override
+    public Boolean saveRemark(ActivityRemark activityRemark) {
+
+        Boolean flag=false;
+        int num=activityRemarkDao.saveRemark(activityRemark);
+        if(num>0){
+            flag=true;
+        }
+        return flag;
     }
 
 
