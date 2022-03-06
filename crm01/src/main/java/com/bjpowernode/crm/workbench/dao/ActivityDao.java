@@ -1,7 +1,6 @@
-package com.bjpowernode.crm.settings.dao;
+package com.bjpowernode.crm.workbench.dao;
 
-import com.bjpowernode.crm.settings.domain.Activity;
-import com.bjpowernode.crm.vo.lodInActionVo;
+import com.bjpowernode.crm.workbench.domain.Activity;
 
 import java.util.List;
 import java.util.Map;

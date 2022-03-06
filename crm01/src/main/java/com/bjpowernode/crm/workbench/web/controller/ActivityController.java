@@ -1,18 +1,18 @@
-package com.bjpowernode.crm.settings.web.controller;
+package com.bjpowernode.crm.workbench.web.controller;
 
-import com.bjpowernode.crm.settings.domain.Activity;
-import com.bjpowernode.crm.settings.domain.ActivityRemark;
+import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.settings.domain.User;
-import com.bjpowernode.crm.settings.service.ActivityService;
+import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.settings.service.UserService;
-import com.bjpowernode.crm.settings.service.impl.ActivityServiceImpl;
+import com.bjpowernode.crm.workbench.service.Impl.ActivityServiceImpl;
 import com.bjpowernode.crm.settings.service.impl.UserServiceImpl;
 import com.bjpowernode.crm.utils.DateTimeUtil;
 import com.bjpowernode.crm.utils.PrintJson;
 import com.bjpowernode.crm.utils.ServiceFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
-import com.bjpowernode.crm.vo.lodInActionVo;
-import com.bjpowernode.crm.vo.pagInActionVo;
+import com.bjpowernode.crm.workbench.vo.lodInActionVo;
+import com.bjpowernode.crm.workbench.vo.pagInActionVo;
 
 
 

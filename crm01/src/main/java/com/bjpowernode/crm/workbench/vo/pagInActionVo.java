@@ -1,4 +1,4 @@
-package com.bjpowernode.crm.vo;
+package com.bjpowernode.crm.workbench.vo;
 
 import java.util.List;
 

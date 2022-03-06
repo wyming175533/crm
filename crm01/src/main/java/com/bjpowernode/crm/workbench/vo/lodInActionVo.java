@@ -1,6 +1,6 @@
-package com.bjpowernode.crm.vo;
+package com.bjpowernode.crm.workbench.vo;
 
-import com.bjpowernode.crm.settings.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.Activity;
 
 import java.util.List;
 

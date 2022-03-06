@@ -1,6 +1,6 @@
-package com.bjpowernode.crm.settings.dao;
+package com.bjpowernode.crm.workbench.dao;
 
-import com.bjpowernode.crm.settings.domain.ActivityRemark;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 
 import java.util.List;
 

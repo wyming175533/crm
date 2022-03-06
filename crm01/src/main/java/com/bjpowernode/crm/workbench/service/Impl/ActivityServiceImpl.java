@@ -1,16 +1,12 @@
-package com.bjpowernode.crm.settings.service.impl;
+package com.bjpowernode.crm.workbench.service.Impl;
 
-import com.bjpowernode.crm.settings.dao.ActivityDao;
-import com.bjpowernode.crm.settings.dao.ActivityRemarkDao;
-import com.bjpowernode.crm.settings.domain.Activity;
-import com.bjpowernode.crm.settings.domain.ActivityRemark;
-import com.bjpowernode.crm.settings.domain.User;
-import com.bjpowernode.crm.settings.service.ActivityService;
+import com.bjpowernode.crm.workbench.dao.ActivityDao;
+import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
+import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
+import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.utils.SqlSessionUtil;
-import com.bjpowernode.crm.vo.lodInActionVo;
-import com.bjpowernode.crm.vo.pagInActionVo;
-
-import org.apache.ibatis.session.SqlSession;
+import com.bjpowernode.crm.workbench.vo.pagInActionVo;
 
 import java.util.List;
 import java.util.Map;

@@ -1,10 +1,8 @@
-package com.bjpowernode.crm.settings.service;
+package com.bjpowernode.crm.workbench.service;
 
-import com.bjpowernode.crm.settings.domain.Activity;
-import com.bjpowernode.crm.settings.domain.ActivityRemark;
-import com.bjpowernode.crm.settings.domain.User;
-import com.bjpowernode.crm.vo.lodInActionVo;
-import com.bjpowernode.crm.vo.pagInActionVo;
+import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
+import com.bjpowernode.crm.workbench.vo.pagInActionVo;
 
 import java.util.List;
 import java.util.Map;

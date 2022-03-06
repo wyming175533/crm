@@ -33,7 +33,7 @@
     </servlet>
     <servlet>
         <servlet-name>ActivityController</servlet-name>
-        <servlet-class>com.bjpowernode.crm.settings.web.controller.ActivityController</servlet-class>
+        <servlet-class>com.bjpowernode.crm.workbench.web.controller.ActivityController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ActivityController</servlet-name>
