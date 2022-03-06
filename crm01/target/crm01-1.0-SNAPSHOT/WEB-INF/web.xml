@@ -76,6 +76,10 @@
     <url-pattern>/workbench/activity/delete.do</url-pattern>
 </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ActivityController</servlet-name>
+        <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/Settings/user/login.do</url-pattern>
     </servlet-mapping>
