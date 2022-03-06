@@ -1,6 +1,7 @@
 package com.bjpowernode.crm.settings.web.controller;
 
 import com.bjpowernode.crm.settings.domain.Activity;
+import com.bjpowernode.crm.settings.domain.ActivityRemark;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.ActivityService;
 import com.bjpowernode.crm.settings.service.UserService;
@@ -43,7 +44,29 @@ public class ActivityController extends HttpServlet {
              getUserListAndActivity(request,response);
         }else if("/workbench/activity/update.do".equals(path)){
              update(request,response);
+        }else if ("/workbench/activity/detail.do".equals(path)){
+             detail(request,response);
+        }else if ("/workbench/activity/getRemarkListById.do".equals(path)){
+            getRemarkListById(request,response);
         }
+    }
+
+    private void getRemarkListById(HttpServletRequest request, HttpServletResponse response) {
+        String id=request.getParameter("id");
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        List<ActivityRemark> a=as.getRemarkListById(id);
+        PrintJson.printJsonObj(response,a);
+
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        String id=request.getParameter("id");
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Activity a=as.detail(id);
+        request.setAttribute("a",a);
+        request.getRequestDispatcher("/workbench/activity/detail.jsp").forward(request,response);//转发是内部路径，不用写项目名
+
+
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) {

@@ -77,7 +77,14 @@
 						if(data.success){
 							$("#activityAddForm")[0].reset();
 							$("#createActivityModal").modal("hide");
-							pagelist(1,2);
+							/**
+							 * $("#activityPage").bs_pagination('getOption', 'currentPage')
+							 * 操作后维持在当前页
+							 * $("#activityPage").bs_pagination('getOption', 'rowsPerPage')
+							 * 维持用户输入的每页展现条数
+							 **/
+							pagelist(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
 						}else{
 							alert("添加失败");
 						}
@@ -95,7 +102,7 @@
 				$("#hidden-owner").val($.trim($("#search-owner").val()));
 				$("#hidden-startDate").val($.trim($("#search-startDate").val()));
 				$("#hidden-endDate").val($.trim($("#search-endDate").val()));
-					pagelist(1,2);
+				pagelist(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 		 								 })
 
 			//复选框的全选和取消全选
@@ -136,7 +143,7 @@
 							success: function (data) {
 								if(data.success){
 									//删除操作完成后进行页面的局部刷新
-									pagelist(1,2);
+									pagelist(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 								}
 								else {
 									alert("删除失败！")
@@ -186,7 +193,7 @@
 					$.each(data.datalist,function (i,e){
 							html+='<tr class="active">';
 							html+='<td><input type="checkbox" name="xz" value="'+e.id+'"/></td>';
-							html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+e.name+'</a></td>';
+							html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.do?id='+e.id+'\';">'+e.name+'</a></td>';
 							html+='<td>'+e.owner+'</td>';
 							html+='<td >'+e.startDate+'</td>';
 							html+='<td >'+e.endDate+'</td>';
@@ -251,6 +258,8 @@
 							})
 							$("#edit-owner").html(html);
 							var owner=data.activity.owner;
+							//owner是用户表中的id，在select中，如果value值等于某个option的value，那么将显示option中的内容
+							//alert(owner)
 							$("#edit-owner").val(owner);
 
 							$("#edit-name").val(data.activity.name);
@@ -278,20 +287,21 @@
 					$.ajax({
 						url: "workbench/activity/update.do",
 						dataType: "json",
-						type: "get",
+						type: "post",
 						data:{
 							"username":name,
-							"id":$("#edit-hidden-id").val(),
-							"owner":$("#edit-hidden-owner").val(),
-							"name":$("#edit-name").val(),
-							"startDate":$("#edit-startDate").val(),
-							"endDate":$("#edit-endDate").val(),
-							"description":$("#edit-description").val(),
-							"cost":$("#edit-cost").val()
+							"id":            $.trim($("#edit-hidden-id").val()),
+							"owner":         $.trim($("#edit-hidden-owner").val()),
+							"name":          $.trim($("#edit-name").val()),
+							"startDate":     $.trim($("#edit-startDate").val()),
+							"endDate":       $.trim($("#edit-endDate").val()),
+							"description":   $.trim($("#edit-description").val()),
+							"cost":          $.trim($("#edit-cost").val())
 						},
 						success: function (data) {
 							if(data.success){
-								pagelist(1,2);
+								pagelist($("#activityPage").bs_pagination('getOption', 'currentPage')
+										,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 							}
 							else{
 								alert("信息修改失败，请重新尝试");

@@ -1,10 +1,12 @@
 package com.bjpowernode.crm.settings.service;
 
 import com.bjpowernode.crm.settings.domain.Activity;
+import com.bjpowernode.crm.settings.domain.ActivityRemark;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.vo.lodInActionVo;
 import com.bjpowernode.crm.vo.pagInActionVo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ActivityService {
@@ -18,4 +20,8 @@ public interface ActivityService {
     Activity getActivity(String id);
 
     Boolean update(Activity activity);
+
+    Activity detail(String id);
+
+    List<ActivityRemark> getRemarkListById(String id);
 }

@@ -3,6 +3,7 @@ package com.bjpowernode.crm.settings.service.impl;
 import com.bjpowernode.crm.settings.dao.ActivityDao;
 import com.bjpowernode.crm.settings.dao.ActivityRemarkDao;
 import com.bjpowernode.crm.settings.domain.Activity;
+import com.bjpowernode.crm.settings.domain.ActivityRemark;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.ActivityService;
 import com.bjpowernode.crm.utils.SqlSessionUtil;
@@ -67,6 +68,18 @@ public class ActivityServiceImpl implements ActivityService {
         Boolean flag=true;
         flag=activityDao.update(activity);
         return flag;
+    }
+
+    @Override
+    public Activity detail(String id) {
+        Activity a=activityDao.detail(id);
+        return a;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListById(String id) {
+        List<ActivityRemark>  a=activityRemarkDao.getRemarkListById(id);
+        return a;
     }
 
 
