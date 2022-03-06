@@ -23,6 +23,7 @@ public class UserController extends HttpServlet {
         String path=request.getServletPath();
 
         if("/Settings/user/login.do".equals(path)){
+
         login(request,response);
         }
     }

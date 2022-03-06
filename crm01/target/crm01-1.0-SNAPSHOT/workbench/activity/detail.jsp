@@ -78,11 +78,11 @@
 						html+='<div id="'+data.ar.id+'" class="remarkDiv" style="height: 60px;">';
 						html+='<img title="" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 						html+='<div style="position: relative; top: -40px; left: 40px;" >';
-						html+='<h5>'+data.ar.noteContent+'</h5>';
-						html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+data.ar.createTime+'由'+data.ar.createBy+'</small>';
+						html+='<h5 id="e'+data.ar.id+'">'+data.ar.noteContent+'</h5>';
+						html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;id="s"'+data.ar.id+'"> '+data.ar.createTime+'由'+data.ar.createBy+'</small>';
 						html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-						html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
-						html+='&nbsp;&nbsp;&nbsp;&nbsp;';//											动态拼接的参数需要用引号引起来，\',\用来转义		\'  '+e.id+'\'
+						html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" onclick="editRemark(\''+data.ar.id+'\')"  style="font-size: 20px; color: #FF0000;"></span></a>';
+						html+='&nbsp;&nbsp;&nbsp;&nbsp;';//											动态拼接的参数需要用引号引起来，\',\用来转义		\'  '+e.id+'    \'
 						html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" onclick="deleteRemark(\''+data.ar.id+'\')" style="font-size: 20px; color: #FF0000;"></span></a>';
 						html+='</div>';
 						html+='</div>';
@@ -97,6 +97,8 @@
 
 			})
 		})
+
+
 
 	});
 
@@ -116,10 +118,10 @@
 					html+='<div id="'+e.id+'" class="remarkDiv" style="height: 60px;">';
 					html+='<img title="" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					html+='<div style="position: relative; top: -40px; left: 40px;" >';
-					html+='<h5>'+e.noteContent+'</h5>';
-					html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+(e.editFlag==0?e.createTime:e.editTime)+'由'+(e.editFlag==0?e.createBy:e.editBy)+'</small>';
+					html+='<h5 id="e'+e.id+'">'+e.noteContent+'</h5>';
+					html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;" id="s"'+e.id+'> '+(e.editFlag==0?e.createTime:e.editTime)+'由'+(e.editFlag==0?e.createBy:e.editBy)+'</small>';
 					html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" onclick="editRemark(\''+e.id+'\')"  style="font-size: 20px; color: #FF0000;"></span></a>';
 					html+='&nbsp;&nbsp;&nbsp;&nbsp;';//											动态拼接的参数需要用引号引起来，\',\用来转义		\'  '+e.id+'\'
 					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" onclick="deleteRemark(\''+e.id+'\')" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html+='</div>';
@@ -154,7 +156,46 @@
 
 		})
 	}
+	function  editRemark(id){
+		$("#editRemarkModal").modal("show");
+		var noteContent=$("#e"+id).html();
+		$("#noteContent").val(noteContent);
+		$("#updateRemarkBtn").click(function (){
+			$.ajax({
+				url: "workbench/activity/updateRemark.do",
+				dataType: "json",
+				data:{
+					"id":id,
+					"noteContent":$.trim($("#noteContent").val())
+				},
+				type: "get",
+				success: function (data) {
+					/**
+					 * data{"success":true,{ar}}
+					 */
 
+					if(data.success){
+						$("#e"+id).html(data.ar.noteContent);
+
+						$("#s"+id).html(data.ar.editTime+" 由"+data.ar.editBy);
+
+						//更新内容之后，关闭模态窗口
+						$("#editRemarkModal").modal("hide");
+
+
+					}
+					else{
+
+						alert("修改失败");
+					}
+
+				}
+
+			})
+
+		})
+
+	}
 
 </script>
 

@@ -28,4 +28,6 @@ public interface ActivityService {
     Boolean deleteRemark(String id);
 
     Boolean saveRemark(ActivityRemark activityRemark);
+
+    Boolean updateRemark(ActivityRemark activityRemark);
 }

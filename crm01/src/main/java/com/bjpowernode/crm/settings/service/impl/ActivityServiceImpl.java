@@ -102,5 +102,15 @@ public class ActivityServiceImpl implements ActivityService {
         return flag;
     }
 
+    @Override
+    public Boolean updateRemark(ActivityRemark activityRemark) {
+        Boolean flag=false;
+        int num=activityRemarkDao.updateRemark(activityRemark);
+        if(num>0){
+            flag=true;
+        }
+        return flag;
+    }
+
 
 }

@@ -43,4 +43,10 @@
             #{activityId}
         )
     </insert>
+    <update id="updateRemark">
+        update tbl_activity_remark
+        set
+        editTime=#{editTime},editBy=#{editBy},noteContent=#{noteContent}
+        where id=#{id}
+    </update>
 </mapper>
