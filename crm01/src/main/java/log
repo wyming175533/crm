@@ -43,3 +43,7 @@ tbl_activity_remark中的内容，再删除tbl_activity中的内容
 可能是由于资源文件没有设置为rootresources导致的
 
 如果是和动态代理，过滤器相关，又有menth相关信息，可能是dao.xml文件和dao文件的方法名，id不一致导致的。
+
+在线索模块遇到问题，无法在web.xml或使用此应用程序部署的jar文件中解析绝对uri：[http://java.sun.com/jsp/jstl/core]
+EL表达式是从jsp2.0和servlet2.4才开始支持的。servlet2.3及以前版本都不支持。
+在servlet2.3版本的页面中可以添加 <%@ page isELIgnored="false"%> 来开启EL表达式并且能使用但会报黄线提示，而且servlet2.3中c标签和EL表达式不能结合使用，必须使用c标签的扩展库 <%@ taglib prefix=“c” uri=“http://java.sun.com/jstl/core_rt” %> 才可以和c标签结合使用
