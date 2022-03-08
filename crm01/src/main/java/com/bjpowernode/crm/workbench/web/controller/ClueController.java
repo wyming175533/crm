@@ -21,7 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.DataInput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClueController extends HttpServlet {
     @Override
@@ -39,8 +41,24 @@ public class ClueController extends HttpServlet {
             ShowActivitysByClueId(request,response);
         }  else if("/workbench/clue/removeRelationById.do".equals(path)){
             removeRelationById(request,response);
+        }else if("/workbench/clue/searchaNoRealtionById.do".equals(path)){
+            System.out.println(path);
+            searchaNoRealtionById(request,response);
         }
 
+    }
+
+    private void searchaNoRealtionById(HttpServletRequest request, HttpServletResponse response) {
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        String clueId=request.getParameter("id");
+        String name=request.getParameter("name");
+
+        Map<String,String> map=new HashMap<>();
+        map.put("id",clueId);
+        map.put("name",name);
+
+        List<Activity> activities=as.searchaNoRealtionById(map);
+        PrintJson.printJsonObj(response,activities);
     }
 
     private void removeRelationById(HttpServletRequest request, HttpServletResponse response) {

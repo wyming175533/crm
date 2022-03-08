@@ -114,5 +114,12 @@ public class ActivityServiceImpl implements ActivityService {
         return activities;
     }
 
+    @Override
+    public List<Activity> searchaNoRealtionById(Map<String, String> map) {
+
+        List<Activity> activities= activityDao.searchaNoRealtionById(map);
+        return activities;
+    }
+
 
 }

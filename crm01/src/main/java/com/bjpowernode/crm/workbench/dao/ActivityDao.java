@@ -24,4 +24,6 @@ public interface ActivityDao {
     Activity detail(String id);
 
     List<Activity> ShowActivitysByClueId(String id);
+
+    List<Activity> searchaNoRealtionById(Map<String, String> map);
 }

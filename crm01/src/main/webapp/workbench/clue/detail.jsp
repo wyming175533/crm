@@ -50,11 +50,46 @@
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
+		$("#searchActivity").keydown(function (event){
+
+					if(event.keyCode==13){
+
+						$.ajax({
+							url: "workbench/clue/searchaNoRealtionById.do",
+							dataType: "json",
+							data:{
+								"id":"${c.id}",
+								"name":$.trim($("#searchActivity").val())
+							},
+							type: "get",
+							success: function (data) {
+								var html=""
+								$.each(data,function (i,e){
+									html+='<tr>';
+									html+='<td><input type="checkbox" id='+e.id+' name="xz"/></td>';
+									html+='<td>'+e.name+'</td>';
+									html+='<td>'+e.startDate+'</td>';
+									html+='<td>'+e.endDate+'</td>';
+									html+='<td>'+e.owner+'</td>';
+									html+='</tr>';
+								})
+								$("#abody").html(html);
+							}
+
+
+						})
+						return false;
+					}
+
+				}
+		)
+
 		ShowActivitys();
 
 
 
 	});
+
 	function remove(id){
 		//alert(id);
 
@@ -105,6 +140,7 @@
 
 		})
 	}
+
 </script>
 
 </head>
@@ -124,7 +160,7 @@
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input  id="searchActivity"  type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -140,21 +176,9 @@
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td><input type="checkbox"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
-							</tr>
+						<tbody id="abody">
+
+
 						</tbody>
 					</table>
 				</div>
@@ -177,7 +201,7 @@
                     <h4 class="modal-title" id="myModalLabel">修改线索</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal" role="form" id="form">
 
                         <div class="form-group">
                             <label for="edit-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
