@@ -60,7 +60,7 @@
 				data:{
 					"fullname":$.trim($("#create-fullname").val()),
 					"appellation":$.trim($("#create-appellation").val()),
-					"owner":$.trim($("#create-owner").html()),
+					"owner":"${user.name}",
 					"company":$.trim($("#create-company").val()),
 					"job":$.trim($("#create-job").val()),
 					"email":$.trim($("#create-email").val()),
@@ -515,7 +515,7 @@
 					<tbody>
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=b84d3125e61241eaa10c3140465e2a85';">马云先生</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=061a275ec44e48519a111598f9050a08';">马云先生</a></td>
 							<td>阿里baba</td>
 							<td>010-84846003</td>
 							<td>12345678901</td>
