@@ -7,8 +7,11 @@ import com.bjpowernode.crm.utils.DateTimeUtil;
 import com.bjpowernode.crm.utils.PrintJson;
 import com.bjpowernode.crm.utils.ServiceFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
+import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.Clue;
+import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueService;
+import com.bjpowernode.crm.workbench.service.Impl.ActivityServiceImpl;
 import com.bjpowernode.crm.workbench.service.Impl.ClueServiceImpl;
 
 import javax.servlet.ServletException;
@@ -32,6 +35,28 @@ public class ClueController extends HttpServlet {
         }else if("/workbench/clue/detail.do".equals(path)){
             detail(request,response);
         }
+        else if("/workbench/clue/ShowActivitysByClueId.do".equals(path)){
+            ShowActivitysByClueId(request,response);
+        }  else if("/workbench/clue/removeRelationById.do".equals(path)){
+            removeRelationById(request,response);
+        }
+
+    }
+
+    private void removeRelationById(HttpServletRequest request, HttpServletResponse response) {
+        String id=request.getParameter("id");
+        ClueService cs= (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        Boolean flag=cs.removeRelationById(id);
+        PrintJson.printJsonFlag(response,flag);
+
+    }
+
+    private void ShowActivitysByClueId(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("展现市场活动中....");
+        String id=request.getParameter("clueid");
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        List<Activity> a= as.ShowActivitysByClueId(id);
+        PrintJson.printJsonObj(response,a);
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

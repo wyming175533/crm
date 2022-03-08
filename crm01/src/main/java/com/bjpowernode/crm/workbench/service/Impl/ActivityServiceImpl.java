@@ -108,5 +108,11 @@ public class ActivityServiceImpl implements ActivityService {
         return flag;
     }
 
+    @Override
+    public List<Activity> ShowActivitysByClueId(String id) {
+        List<Activity> activities=activityDao.ShowActivitysByClueId(id);
+        return activities;
+    }
+
 
 }

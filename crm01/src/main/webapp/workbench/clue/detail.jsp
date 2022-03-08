@@ -50,10 +50,61 @@
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
+		ShowActivitys();
+
 
 
 	});
-	
+	function remove(id){
+		//alert(id);
+
+		$.ajax({
+			url: "workbench/clue/removeRelationById.do",
+			dataType: "json",
+			data:{
+				"id":id
+			},
+			type: "get",
+			success: function (data) {
+				if(data.success){
+					ShowActivitys();
+				}
+				else{
+					alert("解除失败")
+				}
+
+			}
+
+		})
+	}
+	function ShowActivitys(){
+
+
+		$.ajax({
+			url: "workbench/clue/ShowActivitysByClueId.do",
+			dataType: "json",
+			data:{
+				"clueid":"${c.id}"
+			},
+			type: "post",
+			success: function (data) {
+				/**
+				 * data{{activity1}，{activity2}...}
+				 */var html="";
+				$.each(data,function (i,e){
+					html+='<tr>';
+					html+='<td>'+e.name+'</td>';
+					html+='<td>'+e.startDate+'</td>';
+					html+='<td>'+e.endDate+'</td>';
+					html+='<td>'+e.owner+'</td>';
+					html+='<td><a href="javascript:void(0);"  onclick="remove(\''+e.id+'\')" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+					html+='</tr>';
+				})
+				$("#ActivityBody").html(html);
+			}
+
+		})
+	}
 </script>
 
 </head>
@@ -436,21 +487,9 @@
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>发传单</td>
-							<td>2020-10-10</td>
-							<td>2020-10-20</td>
-							<td>zhangsan</td>
-							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
-						<tr>
-							<td>发传单</td>
-							<td>2020-10-10</td>
-							<td>2020-10-20</td>
-							<td>zhangsan</td>
-							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+					<tbody id="ActivityBody">
+
+
 					</tbody>
 				</table>
 			</div>

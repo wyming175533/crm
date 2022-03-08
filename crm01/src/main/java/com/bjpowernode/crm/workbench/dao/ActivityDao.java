@@ -22,4 +22,6 @@ public interface ActivityDao {
     Boolean update(Activity activity);
 
     Activity detail(String id);
+
+    List<Activity> ShowActivitysByClueId(String id);
 }
