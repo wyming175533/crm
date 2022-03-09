@@ -15,7 +15,9 @@
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
-
+	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 <script type="text/javascript">
 
 	$(function(){
@@ -33,7 +35,6 @@
 			})
 		});
 		$("#create-clue").click(function (){
-
 			$.ajax({
 				url: "workbench/clue/getUserList.do",
 				dataType: "json",
@@ -50,9 +51,9 @@
 					$("#createClueModal").modal("show");
 					//$("#createActivityModal").modal("show");
 				}
-			})
+			})//页面加载时加载所有者列表
 		})
-		$("#save-clue").click(function () {
+		$("#save-clue").click(function () {//用于新增线索并保存
 
 			$.ajax({
 				url: "workbench/clue/save.do",
@@ -89,10 +90,105 @@
 			})
 
 		})
-		
-		
+
+		$("#clueBody").on("click",$("input[name=xz]"),function (){
+			if($("input[name=xz]").length==$("input[name=xz]:checked").length){
+				$("#qx").prop("checked",true);
+			}
+			else{
+				$("#qx").prop("checked",false);
+			}
+		})//全选和取消全选
+		$("#qx").click(function (){//全选
+			$("input[name=xz]").prop("checked",this.checked);
+		})
+		pagelist(1,2);
+		//点击查询操作，通过ajax请求局部刷新页面
+		$("#search").click(function (){
+			//将查询条件保存到隐藏区域
+			$("#hidden-fullname").val($.trim($("#search-fullname").val()));
+			$("#hidden-company").val($.trim($("#search-company").val()));
+			$("#hidden-phone").val($.trim($("#search-phone").val()));
+			$("#hidden-mphone").val($.trim($("#search-mphone").val()));
+			$("#hidden-owner").val($.trim($("#search-owner").val()));
+			$("#hidden-state").val($.trim($("#search-state").val()));
+			$("#hidden-source").val($.trim($("#search-source").val()));
+			pagelist(1,$("#cluePage").bs_pagination('getOption', 'rowsPerPage'));
+		})
 	});
-	
+
+	function pagelist(pageNo,pageSize){
+		$("#qx").prop("checked",false);
+		//pageNo每页页码，pageSize每页数量
+		//取出隐藏域的值
+		$("#search-fullname").val($.trim($("#hidden-fullname").val()));
+		$("#search-company").val($.trim($("#hidden-company").val()));
+		$("#search-phone").val($.trim($("#hidden-phone").val()));
+		$("#search-mphone").val($.trim($("#hidden-mphone").val()));
+		$("#search-owner").val($.trim($("#hidden-owner").val()));
+		$("#search-state").val($.trim($("#hidden-state").val()));
+		$("#search-source").val($.trim($("#hidden-source").val()));
+		$.ajax({
+			url: "workbench/clue/pageList.do",
+			dataType: "json",
+			data:{
+				"pageNo":pageNo,
+				"pageSize":pageSize,
+				"fullname":$.trim($("#search-fullname").val()),
+				"phone":$.trim($("#search-phone").val()),
+				"mphone":$.trim($("#search-mphone").val()),
+				"owner":$.trim($("#search-owner").val()),
+				"state":$.trim($("#search-state").val()),
+				"source":$.trim($("#search-source").val()),
+				"company":$.trim($("#search-company").val())
+			},
+			type: "get",
+			success: function (data) {
+
+				/*
+                            date 返回的数据应该包含总记录数，和市场活动信息
+                              {"total":100},"dataList":[{市场活动1},{市场活动2}]]
+                 */
+				var html="";
+				$.each(data.datalist,function (i,e){
+				    html+='<tr class="clue">';
+					html+='<td><input type="checkbox" name="xz"value="'+e.id+'"/></td>';
+					html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?id='+e.id+'\';">'+e.fullname+e.appellation+'</a></td>';
+					html+='<td>'+e.company+'</td>';
+					html+='<td>'+e.phone+'</td>';
+					html+='<td>'+e.mphone+'</td>';
+					html+='<td>'+e.source+'</td>';
+					html+='<td>'+e.owner+'</td>';
+					html+='<td>'+e.state+'</td>';
+					html+='</tr>';
+
+				})
+				$("#clueBody").html(html);
+				var totalPages=data.total%pageSize==0?data.total/pageSize:parseInt(data.total/pageSize)+1;
+				$("#cluePage").bs_pagination({
+					currentPage: pageNo, // 页码
+					rowsPerPage: pageSize, // 每页显示的记录条数
+					maxRowsPerPage: 20, // 每页最多显示的记录条数
+					totalPages: totalPages, // 总页数
+					totalRows: data.total, // 总记录条数
+
+					visiblePageLinks: 3, // 显示几个卡片
+
+					showGoToPage: true,
+					showRowsPerPage: true,
+					showRowsInfo: true,
+					showRowsDefaultInfo: true,
+
+					onChangePage : function(event, data){
+						pagelist(data.currentPage , data.rowsPerPage);
+					}
+				});
+
+			}
+
+		})
+
+	}//pagelist展示市场活动
 </script>
 </head>
 <body>
@@ -405,28 +501,39 @@
 	<div style="position: relative; top: -20px; left: 0px; width: 100%; height: 100%;">
 	
 		<div style="width: 100%; position: absolute;top: 5px; left: 10px;">
-		
+			<input type="hidden" id="hidden-fullname">
+			<input type="hidden" id="hidden-company">
+			<input type="hidden" id="hidden-phone">
+			<input type="hidden" id="hidden-mphone">
+			<input type="hidden" id="hidden-owner">
+			<input type="hidden" id="hidden-state">
+			<input type="hidden" id="hidden-source">
+
+
+
+
+
 			<div class="btn-toolbar" role="toolbar" style="height: 80px;">
 				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-fullname">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">公司</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-company">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">公司座机</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-phone">
 				    </div>
 				  </div>
 				  
@@ -487,7 +594,7 @@
 				    </div>
 				  </div>
 
-				  <button type="submit" class="btn btn-default">查询</button>
+				  <button type="submit" class="btn btn-default" id="search">查询</button>
 				  
 				</form>
 			</div>
@@ -504,7 +611,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input type="checkbox" id="qx"/></td>
 							<td>名称</td>
 							<td>公司</td>
 							<td>公司座机</td>
@@ -514,64 +621,19 @@
 							<td>线索状态</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=061a275ec44e48519a111598f9050a08';">马云先生</a></td>
-							<td>阿里baba</td>
-							<td>010-84846003</td>
-							<td>12345678901</td>
-							<td>广告</td>
-							<td>zhangsan</td>
-							<td>已联系</td>
-						</tr>
-                        <tr class="active">
-                            <td><input type="checkbox" /></td>
-                            <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>
-                            <td>动力节点</td>
-                            <td>010-84846003</td>
-                            <td>12345678901</td>
-                            <td>广告</td>
-                            <td>zhangsan</td>
-                            <td>已联系</td>
-                        </tr>
+					<tbody id="clueBody">
+
+
 					</tbody>
 				</table>
 			</div>
-			
+
 			<div style="height: 50px; position: relative;top: 60px;">
-				<div>
-					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-				</div>
-				<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-					<button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							10
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#">20</a></li>
-							<li><a href="#">30</a></li>
-						</ul>
-					</div>
-					<button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-				</div>
-				<div style="position: relative;top: -88px; left: 285px;">
-					<nav>
-						<ul class="pagination">
-							<li class="disabled"><a href="#">首页</a></li>
-							<li class="disabled"><a href="#">上一页</a></li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li class="disabled"><a href="#">末页</a></li>
-						</ul>
-					</nav>
-				</div>
+
+
+
+					<div id="cluePage"></div>
+
 			</div>
 			
 		</div>

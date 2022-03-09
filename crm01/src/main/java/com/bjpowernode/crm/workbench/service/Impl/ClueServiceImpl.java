@@ -6,9 +6,11 @@ import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.workbench.dao.*;
 import com.bjpowernode.crm.workbench.domain.*;
 import com.bjpowernode.crm.workbench.service.ClueService;
+import com.bjpowernode.crm.workbench.vo.pagInActionVo;
 
 
 import java.util.List;
+import java.util.Map;
 
 public class ClueServiceImpl implements ClueService {
     //线索相关
@@ -168,6 +170,8 @@ public class ClueServiceImpl implements ClueService {
         }
         //(6) 如果有创建交易需求，创建一条交易
         if(t!=null){
+            System.out.println("tttttttttttt");
+            System.out.println(t);
           int createTranNum=tranDao.createTran(t);
           if(createTranNum<0){
               flag=false;
@@ -212,6 +216,16 @@ public class ClueServiceImpl implements ClueService {
             System.out.println("删除线索表失败");
         }
         return flag;
+    }
+
+    @Override
+    public pagInActionVo<Clue> pagelist(Map<String, Object> map) {
+        int total=clueDao.getTotalByendition(map);//获取total总条数
+        List<Clue> clues=clueDao.getActivityListByCondition(map);//获取活动详情信息
+        pagInActionVo<Clue> vo=new pagInActionVo<>();
+        vo.setTotal(total);
+        vo.setDatalist(clues);
+        return vo;
     }
 
 

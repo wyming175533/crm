@@ -140,6 +140,10 @@
     <servlet-name>ClueController</servlet-name>
     <url-pattern>/workbench/clue/convert.do</url-pattern>
 </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClueController</servlet-name>
+        <url-pattern>/workbench/clue/pageList.do</url-pattern>
+    </servlet-mapping>
 
     
     

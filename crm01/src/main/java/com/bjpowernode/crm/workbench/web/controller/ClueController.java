@@ -15,6 +15,7 @@ import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.bjpowernode.crm.workbench.service.Impl.ActivityServiceImpl;
 import com.bjpowernode.crm.workbench.service.Impl.ClueServiceImpl;
+import com.bjpowernode.crm.workbench.vo.pagInActionVo;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,14 +54,47 @@ public class ClueController extends HttpServlet {
         }
         else if("/workbench/clue/convert.do".equals(path)){
             convert(request,response);
+        }else if("/workbench/clue/pageList.do".equals(path)){
+            pagelist(request,response);
         }
 
+    }
+
+    private void pagelist(HttpServletRequest request, HttpServletResponse response) {
+        String fullname =request.getParameter("fullname");
+        String phone =request.getParameter("phone");
+        String mphone =request.getParameter("mphone");
+        String company =request.getParameter("company");
+        String owner =request.getParameter("owner");
+        String state=request.getParameter("state");
+        String source =request.getParameter("source");
+        String pageSizestr=request.getParameter("pageSize");
+        String pageNostr=request.getParameter("pageNo");
+
+        Integer pageSize=Integer.valueOf(pageSizestr);//每页数量
+        Integer pageNo=Integer.valueOf(pageNostr);//第几页
+        Integer skipCount=(pageNo-1)*pageSize;//略过条数
+        Map<String,Object> map=new HashMap<>();
+        map.put("pageSize",pageSize);
+        map.put("skipCount",skipCount);
+        map.put("fullname",fullname);
+        map.put("phone",phone);
+        map.put("mohone",mphone);
+        map.put("company",company);
+        map.put("owner",owner);
+        map.put("state",state);
+        map.put("source",source);
+
+        ClueService cs= (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        pagInActionVo<Clue> vo =cs.pagelist(map);
+        PrintJson.printJsonObj(response,vo);
     }
 
     private void convert(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
         String clueId=request.getParameter("clueId");
 
-        String flag=request.getParameter("falg");
+        String flag=request.getParameter("flag");
         Tran t=null;
         User user=  (User) request.getSession().getAttribute("user");
         String createBy=user.getName();
@@ -72,7 +106,7 @@ public class ClueController extends HttpServlet {
             String activityId =request.getParameter("stage");
             String id=UUIDUtil.getUUID();
             String createTime=DateTimeUtil.getSysTime();
-
+            System.out.println("需要交易。。。。。。。。。。。。");
             t=new Tran();
 
             t.setActivityId(activityId);

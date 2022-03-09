@@ -201,7 +201,6 @@
 
 					})
 						$("#activityBody").html(html);
-
 						var totalPages=data.total%pageSize==0?data.total/pageSize:parseInt(data.total/pageSize)+1;
 						$("#activityPage").bs_pagination({
 							currentPage: pageNo, // 页码
