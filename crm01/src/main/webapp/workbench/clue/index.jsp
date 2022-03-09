@@ -60,7 +60,7 @@
 				data:{
 					"fullname":$.trim($("#create-fullname").val()),
 					"appellation":$.trim($("#create-appellation").val()),
-					"owner":"${user.name}",
+					"owner":"${user.id}",
 					"company":$.trim($("#create-company").val()),
 					"job":$.trim($("#create-job").val()),
 					"email":$.trim($("#create-email").val()),

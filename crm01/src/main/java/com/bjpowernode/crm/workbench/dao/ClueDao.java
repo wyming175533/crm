@@ -8,4 +8,8 @@ public interface ClueDao {
     Boolean save(Clue c);
 
     Clue getClue(String id);
+
+    Clue getClueById(String clueId);
+
+    int deleteClue(String id);
 }
