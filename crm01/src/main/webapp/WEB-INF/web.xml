@@ -128,6 +128,18 @@
         <servlet-name>ClueController</servlet-name>
         <url-pattern>/workbench/clue/searchaNoRealtionById.do</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClueController</servlet-name>
+        <url-pattern>/workbench/clue/relation.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClueController</servlet-name>
+        <url-pattern>/workbench/clue/searchActivityByName.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>ClueController</servlet-name>
+    <url-pattern>/workbench/clue/convert.do</url-pattern>
+</servlet-mapping>
 
     
     

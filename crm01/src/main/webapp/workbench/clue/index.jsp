@@ -78,11 +78,12 @@
 				success: function (data) {
 						if(data.success){
 							$("#createClueModal").modal("hide");
+							$("#form")[0].reset();
 						}
 						else{
 							alert("保存失败")
 						}
-					    $("#form")[0].reset();
+
 				}
 
 			})
@@ -107,7 +108,7 @@
 					<h4 class="modal-title" id="myModalLabel">创建线索</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" id="form" role="form">
 					
 						<div class="form-group">
 							<label for="create-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>

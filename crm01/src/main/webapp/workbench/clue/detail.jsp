@@ -66,7 +66,7 @@
 								var html=""
 								$.each(data,function (i,e){
 									html+='<tr>';
-									html+='<td><input type="checkbox" id='+e.id+' name="xz"/></td>';
+									html+='<td><input type="checkbox" value='+e.id+' name="xz"/></td>';
 									html+='<td>'+e.name+'</td>';
 									html+='<td>'+e.startDate+'</td>';
 									html+='<td>'+e.endDate+'</td>';
@@ -84,6 +84,60 @@
 				}
 		)
 
+		$("#qx").click(function (){//全选
+			$("input[name=xz]").prop("checked",this.checked);
+		})
+
+		$("#abody").on("click",$("input[name=xz]"),function (){
+			if($("input[name=xz]").length==$("input[name=xz]:checked").length){
+				$("#qx").prop("checked",true);
+			}
+			else{
+				$("#qx").prop("checked",false);
+			}
+		})
+
+
+		$("#relation").click(function (){
+
+			var $xz=$("input[name=xz]:checked");
+			if($xz.length==0){
+				alert("请选择要关联的内容")
+			}else{
+				var param="";
+				for(var i=0;i<$xz.length;i++){
+					param+="id="+$($xz[i]).val();
+						param+="&";
+				}
+				param+="clueId="+"${c.id}";
+				alert(param);
+
+
+				$.ajax({
+					url: "workbench/clue/relation.do",
+					dataType: "json",
+					data:param,
+					type: "get",
+					success: function (data) {
+					if(data.success){
+						ShowActivitys();
+						$("#form")[0].reset();
+						$("#qx").prop("checked",false);
+						$("input[name=xz]").prop("checked",false);
+						$("#abody").html("");
+						$("#bundModal").modal("hide");
+					}else {
+						alert("关联失败");
+					}
+
+					}
+
+				})
+			}
+
+
+
+		})
 		ShowActivitys();
 
 
@@ -151,14 +205,14 @@
 		<div class="modal-dialog" role="document" style="width: 80%;">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
+					<button type="button" class="close" data-dismiss="modal" >
 						<span aria-hidden="true">×</span>
 					</button>
 					<h4 class="modal-title">关联市场活动</h4>
 				</div>
 				<div class="modal-body">
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
-						<form class="form-inline" role="form">
+						<form class="form-inline" role="form" id="form">
 						  <div class="form-group has-feedback">
 						    <input  id="searchActivity"  type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -168,7 +222,7 @@
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox"/></td>
+								<td><input type="checkbox" name="qx" id="qx"/></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -184,7 +238,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" class="btn btn-primary" id="relation">关联</button>
 				</div>
 			</div>
 		</div>
@@ -201,7 +255,7 @@
                     <h4 class="modal-title" id="myModalLabel">修改线索</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" role="form" id="form">
+                    <form class="form-horizontal" role="form" >
 
                         <div class="form-group">
                             <label for="edit-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
@@ -357,7 +411,7 @@
 			<h3><small>${c.fullname}${c.appellation}</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.jsp';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.jsp?id=${c.id}&fullname=${c.fullname}&appellation=${c.appellation}&owner=${c.owner}&company=${c.company}'"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>

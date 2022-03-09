@@ -8,7 +8,20 @@
         delete from tbl_clue_activity_relation where id=#{id}
     </delete>
 	
-  	
+    <insert id="relation">
+        insert into tbl_clue_activity_relation(
+        id,
+        clueId,
+        activityId
+        )
+        values
+        <foreach collection="list"  item="list" index="index" separator=",">
+            (
+            #{list.id},#{list.clueId},#{list.activityId}
+            )
+            </foreach>
+
+    </insert>
 </mapper>
 
 

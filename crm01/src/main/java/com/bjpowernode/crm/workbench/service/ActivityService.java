@@ -33,4 +33,6 @@ public interface ActivityService {
     List<Activity> ShowActivitysByClueId(String id);
 
     List<Activity> searchaNoRealtionById(Map<String, String> map);
+
+    List<Activity> searchActivityByName(String name);
 }

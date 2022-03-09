@@ -9,6 +9,8 @@ import com.bjpowernode.crm.utils.ServiceFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.Clue;
+import com.bjpowernode.crm.workbench.domain.ClueActivityRelation;
+import com.bjpowernode.crm.workbench.domain.Tran;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.bjpowernode.crm.workbench.service.Impl.ActivityServiceImpl;
@@ -44,7 +46,76 @@ public class ClueController extends HttpServlet {
         }else if("/workbench/clue/searchaNoRealtionById.do".equals(path)){
             System.out.println(path);
             searchaNoRealtionById(request,response);
+        }else if("/workbench/clue/relation.do".equals(path)){
+            relation(request,response);
+        }else if("/workbench/clue/searchActivityByName.do".equals(path)) {
+            searchActivityByName(request,response);
         }
+        else if("/workbench/clue/convert.do".equals(path)){
+            convert(request,response);
+        }
+
+    }
+
+    private void convert(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
+        String clueId=request.getParameter("clueId");
+
+        String flag=request.getParameter("falg");
+        Tran t=null;
+        User user=  (User) request.getSession().getAttribute("user");
+        String createBy=user.getName();
+        if("true".equals(flag)){//需要创建交易
+            String money =request.getParameter("money");
+            String name  =request.getParameter("name");
+            String expectedDate =request.getParameter("expectedDate");
+            String stage =request.getParameter("stage");
+            String activityId =request.getParameter("stage");
+            String id=UUIDUtil.getUUID();
+            String createTime=DateTimeUtil.getSysTime();
+
+            t=new Tran();
+
+            t.setActivityId(activityId);
+            t.setCreateBy(createBy);
+            t.setCreateTime(createTime);
+            t.setExpectedDate(expectedDate);
+            t.setStage(stage);
+            t.setId(id);
+            t.setMoney(money);
+            t.setName(name);
+        }
+        ClueService cs= (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        Boolean f=cs.convert(clueId,t,createBy);
+        response.sendRedirect(request.getContextPath()+"/workbench/clue/index.jsp");
+
+    }
+
+    private void searchActivityByName(HttpServletRequest request, HttpServletResponse response) {
+
+        ActivityService as= (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        String name=request.getParameter("name");
+
+        List<Activity> activities=as.searchActivityByName(name);
+        PrintJson.printJsonObj(response,activities);
+
+    }
+
+    private void relation(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("关联中...");
+        String[] ids=request.getParameterValues("id");
+        ClueService cs= (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        String clueId=request.getParameter("clueId");
+        List<ClueActivityRelation> list=new ArrayList<>();
+        for(String activityId:ids){
+            ClueActivityRelation cl=new ClueActivityRelation();
+            cl.setActivityId(activityId);
+            cl.setClueId(clueId);
+            cl.setId(UUIDUtil.getUUID());
+            list.add(cl);
+        }
+        Boolean flag=cs.relation(list);
+        PrintJson.printJsonFlag(response,flag);
+
 
     }
 
