@@ -47,6 +47,11 @@
         <servlet-name>DicContorller</servlet-name>
         <servlet-class>com.bjpowernode.crm.settings.web.controller.DicContorller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TranContorller</servlet-name>
+        <servlet-class>com.bjpowernode.crm.workbench.web.controller.TranContorller</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>ActivityController</servlet-name>
@@ -145,12 +150,27 @@
         <url-pattern>/workbench/clue/pageList.do</url-pattern>
     </servlet-mapping>
 
+    <!--交易模块-->
+    <servlet-mapping>
+        <servlet-name>TranContorller</servlet-name>
+        <url-pattern>/workbench/transaction/create.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TranContorller</servlet-name>
+        <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TranContorller</servlet-name>
+        <url-pattern>/workbench/transaction/save.do</url-pattern>
+    </servlet-mapping>
+    
     
     
     <servlet-mapping>
         <servlet-name>DicContorller</servlet-name>
         <url-pattern>/Settings/Dic/..do</url-pattern>
     </servlet-mapping>
+    
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
