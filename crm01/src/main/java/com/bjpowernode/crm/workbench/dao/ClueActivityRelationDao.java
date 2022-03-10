@@ -1,6 +1,7 @@
 package com.bjpowernode.crm.workbench.dao;
 
 import com.bjpowernode.crm.workbench.domain.ClueActivityRelation;
+import com.bjpowernode.crm.workbench.domain.ContactsActivityRelation;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface ClueActivityRelationDao {
     List<String> getActivityIds(String clueId);
 
     int deleteCAR(String clueId);
+
+
 }

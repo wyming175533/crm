@@ -110,7 +110,6 @@
 						param+="&";
 				}
 				param+="clueId="+"${c.id}";
-				alert(param);
 
 
 				$.ajax({

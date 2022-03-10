@@ -28,6 +28,7 @@
     <delete id="deleteCAR">
         delete from tbl_clue_activity_relation where clueId=#{clueId}
     </delete>
+
 </mapper>
 
 

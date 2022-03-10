@@ -24,6 +24,8 @@ public class ClueServiceImpl implements ClueService {
     //联系人
     private ContactsDao contactsDao=SqlSessionUtil.getSqlSession().getMapper(ContactsDao.class);
     private ContactsRemarkDao contactsRemarkDao= SqlSessionUtil.getSqlSession().getMapper(ContactsRemarkDao.class);
+    private ContactsActivityRelationDao contactsActivityRelationdao=SqlSessionUtil.getSqlSession().getMapper(ContactsActivityRelationDao.class);
+
     //交易相关
     private  TranDao tranDao=SqlSessionUtil.getSqlSession().getMapper(TranDao.class);
     private  TranHistoryDao tranHistoryDao=SqlSessionUtil.getSqlSession().getMapper(TranHistoryDao.class);
@@ -140,6 +142,7 @@ public class ClueServiceImpl implements ClueService {
             customerRemark.setEditFlag("0");
             customerRemark.setNoteContent(noteContent);
             int createCustomerRemarkNum = customerRemarkDao.createCustomerRemark(customerRemark);
+            System.out.println("customerRemarkDao");
             if(createCustomerRemarkNum<0){
                 flag = false;
                 System.out.println("创建顾客备注失败");
@@ -154,6 +157,7 @@ public class ClueServiceImpl implements ClueService {
             contactsRemark.setEditFlag("0");
             contactsRemark.setNoteContent(noteContent);
             int createContactsRemarkNum = contactsRemarkDao.createContactsRemark(contactsRemark);
+            System.out.println("contactsRemarkDao");
             if(createContactsRemarkNum<0){
                 flag = false;
                 System.out.println("创建联系人备注失败");
@@ -168,10 +172,23 @@ public class ClueServiceImpl implements ClueService {
             cARelation.setActivityId(activityId);
             cARelation.setContactsId(contacts.getId());
         }
+        int createCoAR=contactsActivityRelationdao.createCoAR(cARelation);
+        if(createCoAR<0){flag=false;
+            System.out.println("创建CAR失败");}
+
+
         //(6) 如果有创建交易需求，创建一条交易
         if(t!=null){
             System.out.println("tttttttttttt");
             System.out.println(t);
+
+            t.setSource(clue.getSource());
+            t.setOwner(clue.getOwner());
+            t.setNextContactTime(clue.getNextContactTime());
+            t.setDescription(clue.getDescription());
+            t.setCustomerId(customer.getId());
+            t.setContactSummary(clue.getContactSummary());
+            t.setContactsId(contacts.getId());
           int createTranNum=tranDao.createTran(t);
           if(createTranNum<0){
               flag=false;

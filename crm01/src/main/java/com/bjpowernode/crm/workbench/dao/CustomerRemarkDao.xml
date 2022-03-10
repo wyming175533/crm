@@ -11,7 +11,7 @@
         createBy,
         createTime,
         editFlag,
-        clueId
+        customerId
 
         )values(
         #{id},
@@ -19,7 +19,7 @@
         #{createBy},
         #{createTime},
         #{editFlag},
-        #{clueId}
+        #{customerId}
         )
     </insert>
   	
