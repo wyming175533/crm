@@ -11,6 +11,8 @@ import com.bjpowernode.crm.workbench.domain.Tran;
 import com.bjpowernode.crm.workbench.domain.TranHistory;
 import com.bjpowernode.crm.workbench.service.TranService;
 
+import java.util.List;
+
 public class TranServiceImpl  implements TranService {
     private  TranDao tranDao=SqlSessionUtil.getSqlSession().getMapper(TranDao.class);
     private CustomerDao customerDao=SqlSessionUtil.getSqlSession().getMapper(CustomerDao.class);
@@ -55,6 +57,46 @@ public class TranServiceImpl  implements TranService {
             System.out.println("创建交易历史失败");
         }
 
+        return flag;
+    }
+
+    @Override
+    public Tran detail(String id) {
+        Tran t=tranDao.detail(id);
+
+        return t;
+    }
+
+    @Override
+    public List<TranHistory> showHistoryByTranId(String tranId) {
+        List<TranHistory> trans=tranDao.showHistoryByTranId(tranId);
+        return trans;
+    }
+
+    @Override
+    public Boolean changeStage(Tran t) {
+        //根据id对交易进行更新操作
+        Boolean flag=true;
+        int count=tranDao.changeStage(t);
+        if(count<0){
+            flag=false;
+            System.out.println("修改交易失败");
+        }
+
+        TranHistory tranHistory=new TranHistory();
+        tranHistory.setCreateBy(t.getCreateBy());
+        tranHistory.setCreateTime(DateTimeUtil.getSysTime());
+        tranHistory.setExpectedDate(t.getExpectedDate());
+        tranHistory.setId(UUIDUtil.getUUID());
+        tranHistory.setMoney(t.getMoney());
+        tranHistory.setStage(t.getStage());
+        tranHistory.setTranId(t.getId());
+        tranHistory.setPossibility(t.getPossibility());
+        int createTHNum=tranHistoryDao.createTranHistory(tranHistory);
+        if(createTHNum<0){
+            flag=false;
+            System.out.println("创建交易历史失败");
+        }
         return flag;
     }
 }

@@ -163,6 +163,18 @@
         <servlet-name>TranContorller</servlet-name>
         <url-pattern>/workbench/transaction/save.do</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TranContorller</servlet-name>
+        <url-pattern>/workbench/transaction/detail.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TranContorller</servlet-name>
+        <url-pattern>/workbench/transaction/showHistory.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TranContorller</servlet-name>
+        <url-pattern>/workbench/transaction/changeStage.do</url-pattern>
+    </servlet-mapping>
     
     
     

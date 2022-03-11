@@ -155,11 +155,11 @@
 					<tbody>
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.jsp';">动力节点-交易01</a></td>
-							<td>动力节点</td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.do?id=7ef9d79a5027448ea8ce9653cdecf7f3';">好东西</a></td>
+							<td>泰坦公式</td>
 							<td>谈判/复审</td>
 							<td>新业务</td>
-							<td>zhangsan</td>
+							<td>张三</td>
 							<td>广告</td>
 							<td>李四</td>
 						</tr>

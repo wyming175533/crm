@@ -9,6 +9,7 @@ import com.bjpowernode.crm.utils.ServiceFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.workbench.domain.Customer;
 import com.bjpowernode.crm.workbench.domain.Tran;
+import com.bjpowernode.crm.workbench.domain.TranHistory;
 import com.bjpowernode.crm.workbench.service.CustomerService;
 import com.bjpowernode.crm.workbench.service.Impl.CustomerServiceImpl;
 import com.bjpowernode.crm.workbench.service.Impl.TranServiceImpl;
@@ -19,7 +20,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TranContorller extends HttpServlet {
     @Override
@@ -32,8 +35,79 @@ public class TranContorller extends HttpServlet {
         }
         else if("/workbench/transaction/save.do".equals(path)){
             save(request,response);
+        }else if("/workbench/transaction/detail.do".equals(path)){
+            detail(request,response);
+        }
+        else if("/workbench/transaction/showHistory.do".equals(path)){
+            showHistory(request,response);
+        }
+        else if("/workbench/transaction/changeStage.do".equals(path)){
+            changeStage(request,response);
         }
 
+    }
+
+    private void changeStage(HttpServletRequest request, HttpServletResponse response) {
+        String id=request.getParameter("id");
+        String money=request.getParameter("money");
+        String stage=request.getParameter("stage");
+        String editTime=DateTimeUtil.getSysTime();
+        User us=(User)request.getSession().getAttribute("user");
+        String  editBy=us.getName();
+        String expectedDate=request.getParameter("expectedDate");
+        String createTime=request.getParameter("createTime");
+        String createBy=request.getParameter("createBy");
+
+        Tran t=new Tran();
+        t.setCreateTime(createTime);
+        t.setCreateBy(createBy);
+        t.setId(id);
+        t.setMoney(money);
+        t.setEditBy(editBy);
+        t.setEditTime(editTime);
+        t.setExpectedDate(expectedDate);
+        t.setStage(stage);
+        Map<String,String> map = (Map<String, String>) request.getServletContext().getAttribute("map2");
+        String possibility= map.get(t.getStage());
+        t.setPossibility(possibility);
+        TranService ts= (TranService) ServiceFactory.getService(new TranServiceImpl());
+        Boolean flag=ts.changeStage(t);
+
+
+        Map<String,Object> retmap=new HashMap<>();
+        retmap.put("success",flag);
+        retmap.put("t",t);
+        PrintJson.printJsonObj(response,retmap);
+
+
+
+    }
+
+    private void showHistory(HttpServletRequest request, HttpServletResponse response) {
+        String tranId=request.getParameter("tranId");
+        TranService ts= (TranService) ServiceFactory.getService(new TranServiceImpl());
+        Map<String,String> map = (Map<String, String>) request.getServletContext().getAttribute("map2");//获取全局域中缓存的数据
+        List<TranHistory> ths=ts.showHistoryByTranId(tranId);
+        for(TranHistory th:ths){
+            String possibility= map.get(th.getStage());
+            th.setPossibility(possibility);
+        }
+        PrintJson.printJsonObj(response,ths);
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("详情页信息加载中,..");
+        String id=request.getParameter("id");
+        TranService ts= (TranService) ServiceFactory.getService(new TranServiceImpl());
+        System.out.println(id);
+        Tran t=ts.detail(id);
+
+        Map<String,String> map = (Map<String, String>) request.getServletContext().getAttribute("map2");
+        String possibility= map.get(t.getStage());
+        t.setPossibility(possibility);
+        request.setAttribute("t",t);
+        System.out.println(t.getExpectedDate()+"////////////////////////////////////////////////");
+        request.getRequestDispatcher("/workbench/transaction/detail.jsp").forward(request,response);
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) throws IOException {
