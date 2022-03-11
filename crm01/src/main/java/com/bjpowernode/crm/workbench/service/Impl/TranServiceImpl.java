@@ -11,7 +11,9 @@ import com.bjpowernode.crm.workbench.domain.Tran;
 import com.bjpowernode.crm.workbench.domain.TranHistory;
 import com.bjpowernode.crm.workbench.service.TranService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TranServiceImpl  implements TranService {
     private  TranDao tranDao=SqlSessionUtil.getSqlSession().getMapper(TranDao.class);
@@ -98,5 +100,16 @@ public class TranServiceImpl  implements TranService {
             System.out.println("创建交易历史失败");
         }
         return flag;
+    }
+
+    @Override
+    public Map<String, Object> getCharts() {
+        int total=tranDao.getTotal();
+        List<Map<String,Object>> datalist=tranDao.getChars();
+        Map<String,Object> map=new HashMap<>();
+         map.put("total",total);
+         map.put("datalist",datalist);
+
+        return map;
     }
 }

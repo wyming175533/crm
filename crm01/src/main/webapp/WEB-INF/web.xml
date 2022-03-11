@@ -175,6 +175,10 @@
         <servlet-name>TranContorller</servlet-name>
         <url-pattern>/workbench/transaction/changeStage.do</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TranContorller</servlet-name>
+        <url-pattern>/workbench/transaction/getCharts.do</url-pattern>
+    </servlet-mapping>
     
     
     

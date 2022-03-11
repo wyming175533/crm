@@ -4,6 +4,7 @@ import com.bjpowernode.crm.workbench.domain.Tran;
 import com.bjpowernode.crm.workbench.domain.TranHistory;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TranDao {
 
@@ -14,4 +15,8 @@ public interface TranDao {
     List<TranHistory> showHistoryByTranId(String tranId);
 
     int changeStage(Tran t);
+
+    int getTotal();
+
+    List<Map<String, Object>> getChars();
 }
