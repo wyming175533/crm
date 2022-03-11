@@ -166,7 +166,7 @@
 					$("#Change-editTime").html(data.t.editTime);
 					$("#Change-possibility").html(data.t.possibility);
 					showTranHistory();
-
+					changeIcon(stage,i);
 				}
 				else{
 					alert("改变交易状态失败")
@@ -174,6 +174,69 @@
 			}
 
 		})
+
+	}
+	function changeIcon(steage,index1){
+		var currentSteage=steage;//当前阶段
+		var currentPossibility=$("#Change-possibility").html();//当前可能性
+		var index=index1;//当前下标，id
+		var point="<%=point%>";//分界点下标
+
+		if(currentPossibility=="0"){//前七个黑圈，后两个一个红叉，一个黑叉
+			for(var i=0;i<point;i++){
+				//黑圈
+				$("#"+i).removeClass();
+				$("#"+i).addClass("glyphicon glyphicon-record mystage");
+				$("#"+i).css("color","#000000");
+			}
+			for(var i=point;i<<%=dvlist.size()%>;i++){
+				if(i==index){
+					//红叉
+					$("#"+i).removeClass();
+					$("#"+i).addClass("glyphicon glyphicon-remove mystage");
+					$("#"+i).css("color","#FF0000");
+				}else{
+					//黑叉
+					$("#"+i).removeClass();
+					$("#"+i).addClass("glyphicon glyphicon-remove mystage");
+					$("#"+i).css("color","#000000");
+				}
+
+			}
+		}else{//后两个都是黑叉，当前状态为绿色标记，其它为绿圈
+
+			for(var i=0;i<<%=dvlist.size()%>;i++){
+				if(i<point){
+					if(i<index){
+						//绿圈
+						$("#"+i).removeClass();
+						$("#"+i).addClass("glyphicon glyphicon-ok-circle mystage");
+						$("#"+i).css("color","#90F790");
+
+					}else if(i==index){
+
+						//绿色标记
+						$("#"+i).removeClass();
+						$("#"+i).addClass("glyphicon glyphicon-map-marker mystage");
+						$("#"+i).css("color","#90F790");
+					}else {
+						//黑圈
+						$("#"+i).removeClass();
+						$("#"+i).addClass("glyphicon glyphicon-record mystage");
+						$("#"+i).css("color","#000000");
+					}
+				}else{
+					//黑叉
+					$("#"+i).removeClass();
+					$("#"+i).addClass("glyphicon glyphicon-remove mystage");
+					$("#"+i).css("color","#000000");
+				}
+
+			}
+
+		}
+
+
 
 	}
 	
